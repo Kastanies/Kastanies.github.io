@@ -6,14 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Archives | Zhuo&#39;s Blog</title>
+  <title>Mac服务器多用户创建与用户添加删除 | Zhuo&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Zhuo&#39;s Blog">
-<meta property="og:url" content="http://example.com/archives/index.html">
+  <meta name="description" content="参考：CSDN博客  关于dscl在摸索MacOS的过程中，发现一些linux系统的指令是不适用的 如果想要在MacOS下通过命令行进行用户组、用户的管理，就需要使用dscl dscl是一个目录服务的命令行，用来创建和管理目录服务数据。它还提供了基本的编辑器命令。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mac服务器多用户创建与用户添加删除">
+<meta property="og:url" content="http://example.com/2023/11/14/MacOS-account/index.html">
 <meta property="og:site_name" content="Zhuo&#39;s Blog">
+<meta property="og:description" content="参考：CSDN博客  关于dscl在摸索MacOS的过程中，发现一些linux系统的指令是不适用的 如果想要在MacOS下通过命令行进行用户组、用户的管理，就需要使用dscl dscl是一个目录服务的命令行，用来创建和管理目录服务数据。它还提供了基本的编辑器命令。">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-11-14T10:01:34.000Z">
+<meta property="article:modified_time" content="2023-11-14T13:38:23.374Z">
 <meta property="article:author" content="Kastanie">
+<meta property="article:tag" content="Mac服务器，用户创建">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Zhuo&#39;s Blog" type="application/atom+xml">
@@ -131,36 +136,117 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-MacOS-account" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2023" class="archive-year">2023</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/11/14/MacOS-account/" class="archive-article-date">
-  	<time datetime="2023-11-14T10:01:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-11-14</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/11/14/MacOS-account/">Mac服务器多用户创建与用户添加删除</a>
+    <h1 class="article-title" itemprop="name">
+      Mac服务器多用户创建与用户添加删除
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2023/11/14/MacOS-account/" class="archive-article-date">
+  	<time datetime="2023-11-14T10:01:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-11-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_24433609/article/details/127108575">CSDN博客</a></p>
+</blockquote>
+<h2 id="关于dscl"><a href="#关于dscl" class="headerlink" title="关于dscl"></a>关于dscl</h2><p>在摸索MacOS的过程中，发现一些linux系统的指令是不适用的</p>
+<p>如果想要在MacOS下通过命令行进行用户组、用户的管理，就需要使用<mark><strong>dscl</strong><mark></p>
+<p>dscl是一个目录服务的命令行，用来创建和管理目录服务数据。它还提供了基本的编辑器命令。</p>
+<span id="more"></span>
+
+<h2 id="开始创建用户"><a href="#开始创建用户" class="headerlink" title="开始创建用户"></a>开始创建用户</h2><p>首先，需要进入root用户</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo su</span><br></pre></td></tr></table></figure>
+
+<p>然后便通过dscl命令开始创建用户<mark>（需要在 <em>&#x2F;Users</em> 数据目录下）</p>
+<h4 id="创建一个名为kastanie的用户并设置用户的uid-（用户的ID需要大于500）"><a href="#创建一个名为kastanie的用户并设置用户的uid-（用户的ID需要大于500）" class="headerlink" title="- 创建一个名为kastanie的用户并设置用户的uid （用户的ID需要大于500）"></a>- 创建一个名为kastanie的用户并设置用户的uid （用户的ID需要大于500）</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dscl . create /Users/kastanie uid 501</span><br></pre></td></tr></table></figure>
+
+<h4 id="设置用户的组ID（同样需要大于500）"><a href="#设置用户的组ID（同样需要大于500）" class="headerlink" title="- 设置用户的组ID（同样需要大于500）"></a>- 设置用户的组ID（同样需要大于500）</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dscl . create /Users/kastanie gid 501</span><br></pre></td></tr></table></figure>
+
+<h4 id="设置用户的初始密码为空"><a href="#设置用户的初始密码为空" class="headerlink" title="- 设置用户的初始密码为空"></a>- 设置用户的初始密码为空</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dscl . create /Users/kastanie passwd &#x27;*&#x27;</span><br></pre></td></tr></table></figure>
+
+<h4 id="修改密码"><a href="#修改密码" class="headerlink" title="- 修改密码"></a>- 修改密码</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">passwd kastanie</span><br></pre></td></tr></table></figure>
+
+<h4 id="将用户加入群组并且可以通过SSH连接"><a href="#将用户加入群组并且可以通过SSH连接" class="headerlink" title="- 将用户加入群组并且可以通过SSH连接"></a>- 将用户加入群组并且可以通过SSH连接</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dscl . -append /Groups/students GroupMembership kastanie</span><br><span class="line">dscl . -append /Groups/com.apple.access_ssh GroupMembership kastanie</span><br></pre></td></tr></table></figure>
+
+<h4 id="创建用户的home目录"><a href="#创建用户的home目录" class="headerlink" title="- 创建用户的home目录"></a>- 创建用户的home目录</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /Users/kastanie</span><br></pre></td></tr></table></figure>
+
+<h4 id="在用户已经有所属的组的前提下-设定文件夹的宿主是新用户"><a href="#在用户已经有所属的组的前提下-设定文件夹的宿主是新用户" class="headerlink" title="在用户已经有所属的组的前提下, 设定文件夹的宿主是新用户"></a>在用户已经有所属的组的前提下, 设定文件夹的宿主是新用户</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chown -R kastanie:students /Users/kastanie</span><br></pre></td></tr></table></figure>
+
+<h4 id="声明用户的home目录"><a href="#声明用户的home目录" class="headerlink" title="- 声明用户的home目录"></a>- 声明用户的home目录</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dscl . create /Users/kastanie home /Users/kastanie</span><br></pre></td></tr></table></figure>
+
+<h4 id="难免出错，可以删除用户重新来过"><a href="#难免出错，可以删除用户重新来过" class="headerlink" title="- 难免出错，可以删除用户重新来过"></a>- 难免出错，可以删除用户重新来过</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dscl . delete /Users/kastanie </span><br></pre></td></tr></table></figure>
+
+<h4 id="建立数据存储文件夹-博主所在专业的习惯，无需求的小伙伴可以略过"><a href="#建立数据存储文件夹-博主所在专业的习惯，无需求的小伙伴可以略过" class="headerlink" title="- 建立数据存储文件夹 (博主所在专业的习惯，无需求的小伙伴可以略过)"></a>- 建立数据存储文件夹 (博主所在专业的习惯，无需求的小伙伴可以略过)</h4><p>首先在数据存储位置 <em>&#x2F;Volumes</em> 内的 data 文件夹内创建用户的文件夹</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /Volumes/pegasus32_R8/data/kastanie</span><br></pre></td></tr></table></figure>
+<p>然后利用 <em>ln</em> 链接至用户的 <em>home</em> 目录下，更名为 <em>work</em> 文件夹</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /Volumes/pegasus32_R8/data/kastanie /Users/kastanie/work</span><br></pre></td></tr></table></figure>
+<hr>
+<p>至此，一个新鲜的MacOS的用户就已经创建好啦！</p>
+<h2 id="一些基本的查看命令"><a href="#一些基本的查看命令" class="headerlink" title="一些基本的查看命令"></a>一些基本的查看命令</h2><ul>
+<li>查看用户属性</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dscl . read /Users/kastanie</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看用户的ID和组ID</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dscl . read /Users/kastanie UniqueID PrimaryGroupID</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>列出所有用户的ID</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dscl . list /Users UniqueID </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>列出所有用户的组ID</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dscl . list /Users PrimaryGroupID</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果没有用户组，还需要创建新的用户组  (注意：*** 代表组ID，要大于500)</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dscl . create /Groups/groupname gid ***</span><br></pre></td></tr></table></figure>
+
+<hr>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -172,7 +258,7 @@
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -185,93 +271,104 @@
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2023/11/14/MacOS-account/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/10/21/lll/" class="archive-article-date">
-  	<time datetime="2023-10-21T12:02:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-21</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2023/10/21/lll/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">lll</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/10/21/lll/">lll</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">12</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/adjnfes//" class="article-tag-list-link color3">adjnfes</a>
-        		</li>
-      		
-		</ul>
-	</div>
+        
+        
+    </div>
+</aside>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/10/20/hello-world/" class="archive-article-date">
-  	<time datetime="2023-10-20T11:29:53.693Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-20</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/10/20/hello-world/">Hello World</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -294,8 +391,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
