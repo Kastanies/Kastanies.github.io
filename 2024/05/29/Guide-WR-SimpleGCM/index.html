@@ -16,7 +16,7 @@
 <meta property="og:description" content="在学习使用WR_SimpleGCM的时候，遇到了很多的问题，幸运的是，在师姐、师兄、服务器管理员的帮助下，成功将模式跑起来。特将使用模式的完整流程记录，以供参考。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-05-29T02:39:54.000Z">
-<meta property="article:modified_time" content="2024-05-29T07:10:43.678Z">
+<meta property="article:modified_time" content="2024-05-29T07:33:17.523Z">
 <meta property="article:author" content="Kastanie">
 <meta property="article:tag" content="GFDL">
 <meta property="article:tag" content="Simple GCM">
@@ -173,20 +173,20 @@
 <li><strong>修改intel.mk</strong></li>
 </ul>
 <p><em>commands</em>部分修改如下</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">FC = mpiifort #using MPI</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">FC = mpif90</span> </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">CC = mpicc</span></span><br><span class="line">CC = mpiicc</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">LD = mpif90</span></span><br><span class="line">LD = $(FC)</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">add AR</span></span><br><span class="line">AR = /usr/bin/ar</span><br><span class="line">ARFLAGS = rv</span><br></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">FC = mpiifort <span class="comment">#using MPI</span></span><br><span class="line"><span class="comment">#FC = mpif90 </span></span><br><span class="line"><span class="comment">#CC = mpicc</span></span><br><span class="line">CC = mpiicc</span><br><span class="line"><span class="comment">#LD = mpif90</span></span><br><span class="line">LD = <span class="variable">$(FC)</span></span><br><span class="line"><span class="comment">#add AR</span></span><br><span class="line">AR = /usr/bin/ar</span><br><span class="line">ARFLAGS = rv</span><br></pre></td></tr></table></figure>
 <p>*使用的编译器要根据每个服务器已经安装的编译器来修改，可以查看.bashrc文件，也可以自己安装<br>这里使用的编译器主要是针对fortran和c语言的编译器，而MPI则意味着使用并行运算</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">设置intel的library和include的路径</span></span><br><span class="line">LIB_MPI := -L/YOUR/OWN/PATH/lib #也可能是lib64</span><br><span class="line">INC_MPI := -I/YOUR/OWN/PATH/include #也可能是include64</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">设置NETCDF的library和include的路径</span></span><br><span class="line">INC_NETCDF := -I/YOUR/OWN/PATH/include</span><br><span class="line">LIB_NETCDF := -L/YOUR/OWN/PATH/lib -lnetcdf</span><br></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#设置intel的library和include的路径</span></span><br><span class="line">LIB_MPI := -L/YOUR/OWN/PATH/lib <span class="comment">#也可能是lib64</span></span><br><span class="line">INC_MPI := -I/YOUR/OWN/PATH/<span class="keyword">include</span> <span class="comment">#也可能是include64</span></span><br><span class="line"><span class="comment">#设置NETCDF的library和include的路径</span></span><br><span class="line">INC_NETCDF := -I/YOUR/OWN/PATH/<span class="keyword">include</span></span><br><span class="line">LIB_NETCDF := -L/YOUR/OWN/PATH/lib -lnetcdf</span><br></pre></td></tr></table></figure>
 <p>*需要先检查服务器的intel以及NETCDF的安装以及对应的版本，再确认路径，同样可以查看.bashrc文件</p>
 <ul>
 <li><strong>修改Makefile</strong></li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">include intel.mk</span><br><span class="line"></span><br><span class="line">wr_hs.x: libfms_spectral_solo.a</span><br><span class="line">        $(LD) $^ $(LDFLAGS) -o $@ #here</span><br><span class="line"></span><br><span class="line">libfms_spectral_solo.a:  FORCE</span><br><span class="line">        make  NETCDF=3  -f Makefile.fms_spectral_solo $@ #here</span><br><span class="line">FORCE:</span><br><span class="line"></span><br><span class="line">clean:</span><br><span class="line">        make  NETCDF=3  -f Makefile.fms_spectral_solo clean #here</span><br><span class="line"></span><br><span class="line">localize:</span><br><span class="line">        make  NETCDF=3  -f Makefile.fms_spectral_solo localize #here</span><br></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span> intel.mk</span><br><span class="line"></span><br><span class="line"><span class="section">wr_hs.x: libfms_spectral_solo.a</span></span><br><span class="line">        <span class="variable">$(LD)</span> <span class="variable">$^</span> <span class="variable">$(LDFLAGS)</span> -o <span class="variable">$@</span> <span class="comment">#here</span></span><br><span class="line"></span><br><span class="line"><span class="section">libfms_spectral_solo.a:  FORCE</span></span><br><span class="line">        make  NETCDF=3  -f Makefile.fms_spectral_solo <span class="variable">$@</span> <span class="comment">#here</span></span><br><span class="line"><span class="section">FORCE:</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">        make  NETCDF=3  -f Makefile.fms_spectral_solo clean <span class="comment">#here</span></span><br><span class="line"></span><br><span class="line"><span class="section">localize:</span></span><br><span class="line">        make  NETCDF=3  -f Makefile.fms_spectral_solo localize <span class="comment">#here</span></span><br></pre></td></tr></table></figure>
 
 <p>*Makefile文件的修改比较简单。由于下载的原因，所有注释“#here”的代码行的开头为8个空格，需要重新修改为两个&#x2F;tab</p>
 <ul>
 <li><strong>修改Makefile.fms_spectral_solo</strong></li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SRCROOT = /YOUR/OWN/PATH/WR_simpleGCM/fms_hs_winnie/src/</span><br></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SRCROOT = /YOUR/OWN/PATH/WR_simpleGCM/fms_hs_winnie/src/</span><br></pre></td></tr></table></figure>
 <p>*修改第一行的路径</p>
 <ul>
 <li><strong>修改compile.csh</strong></li>
@@ -467,15 +467,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">个体化</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">《克林索尔的最后夏天》</a>
+                <a href="javascript:void(0)" class="js-tag color5">GFDL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Simple GCM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -487,15 +487,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">《克林索尔的最后夏天》</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">《东方之旅》</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">GFDL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Simple GCM</a>
               </li>
             
             <div class="clearfix"></div>
